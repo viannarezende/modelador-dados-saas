@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Modelador de Dados{% endblock %}
+
+{% block body_class %}page-space{% endblock %}
+
+{% block content %}
+
+
+<section class="pricing-space">
+
+    <div class="space-glow glow-one"></div>
+    <div class="space-glow glow-two"></div>
+
+    <div class="login-container" style="display:flex; justify-content:center; align-items:center; width:100%; min-height:100vh;">
+
+        <div class="login-box login-space">
+            <h1>Login</h1>
+            <p class="subtitle">Acesse o sistema de geração de modelo de dados</p>
+
+            {% if erro %}
+                <div class="alert alert-error">{{ erro }}</div>
+            {% endif %}
+
+            {% if sucesso %}
+                <div class="alert alert-success">{{ sucesso }}</div>
+            {% endif %}
+
+            <form method="post" action="/login">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="seuemail@empresa.com"
+                        value="{{ email if email else '' }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        placeholder="Mínimo 8 caracteres"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn-plan">
+                    Entrar
+                </button>
+            </form>
+
+            <p class="login-footer">
+                Não tem conta? <a href="/planos">Escolher plano</a>
+            </p>
+        </div>
+
+    </div>
+
+</section>
+{% endblock %}

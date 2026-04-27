@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro - Modelador de Dados{% endblock %}
+
+{% block body_class %}page-space{% endblock %}
+
+{% block content %}
+<section class="pricing-space">
+
+    <div class="space-glow glow-one"></div>
+    <div class="space-glow glow-two"></div>
+
+    <div class="login-container">
+
+        <div class="login-box login-space">
+            <h1>Cadastro</h1>
+            <p class="subtitle">Crie sua conta para começar</p>
+
+            {% if erro %}
+                <div class="alert alert-error">{{ erro }}</div>
+            {% endif %}
+
+            <form method="post" action="/register">
+
+                <input type="hidden" name="plano_id" value="{{ plano_id }}">
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ email if email else '' }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmar_senha">Confirmar senha</label>
+                    <input
+                        type="password"
+                        id="confirmar_senha"
+                        name="confirmar_senha"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn-plan">
+                    Criar conta
+                </button>
+            </form>
+
+            <p class="login-footer">
+                Já tem conta? <a href="/login">Entrar</a>
+            </p>
+        </div>
+
+    </div>
+
+</section>
+{% endblock %}

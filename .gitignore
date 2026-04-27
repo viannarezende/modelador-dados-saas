@@ -1,0 +1,20 @@
+# Ambiente virtual
+.venv/
+venv/
+
+# Variáveis de ambiente
+.env
+
+# Cache Python
+__pycache__/
+*.pyc
+
+# Banco local
+modelador.db
+
+# Uploads
+uploads/
+
+# Arquivos do sistema/editor
+.vscode/
+.DS_Store

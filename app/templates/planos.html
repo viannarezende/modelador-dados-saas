@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Planos - Modelador de Dados{% endblock %}
+
+{% block content %}
+<section class="pricing-space">
+
+    <div class="space-glow glow-one"></div>
+    <div class="space-glow glow-two"></div>
+
+    <div class="pricing-container">
+        <div class="pricing-header">
+            <span class="eyebrow">Modelador de Dados com IA</span>
+
+            <h1>Escolha o plano ideal para acelerar seus modelos de dados</h1>
+
+            <p>
+                Automatize gerações, ajustes e melhorias em seus modelos de dados
+                com uma experiência inteligente, rápida e produtiva.
+            </p>
+        </div>
+
+        <div class="planos-grid">
+            <div class="plano-card">
+                <div>
+                    <h2>Básico</h2>
+                    <p class="plano-desc">Para começar e validar o uso da plataforma.</p>
+
+                    <p class="plano-preco">
+                        R$ 29<span>/mês</span>
+                    </p>
+
+                    <ul>
+                        <li>5 gerações por mês</li>
+                        <li>15 ajustes por mês</li>
+                        <li>Ideal para testes e uso inicial</li>
+                    </ul>
+                </div>
+
+                <a href="/register?plano_id=1" class="btn-plan">Escolher Básico</a>
+            </div>
+
+            <div class="plano-card plano-destaque">
+                <div class="plano-badge">Mais escolhido</div>
+
+                <div>
+                    <h2>Profissional</h2>
+                    <p class="plano-desc">Mais produtividade para uso frequente.</p>
+
+                    <p class="plano-preco">
+                        R$ 59<span>/mês</span>
+                    </p>
+
+                    <ul>
+                        <li>15 gerações por mês</li>
+                        <li>50 ajustes por mês</li>
+                        <li>Mais produtividade para uso frequente</li>
+                    </ul>
+                </div>
+
+                <a href="/register?plano_id=2" class="btn-plan">Escolher Profissional</a>
+            </div>
+
+            <div class="plano-card">
+                <div>
+                    <h2>Premium</h2>
+                    <p class="plano-desc">Para operação intensiva e maior volume.</p>
+
+                    <p class="plano-preco">
+                        R$ 99<span>/mês</span>
+                    </p>
+
+                    <ul>
+                        <li>50 gerações por mês</li>
+                        <li>100 ajustes por mês</li>
+                        <li>Plano ideal para operação intensiva</li>
+                    </ul>
+                </div>
+
+                <a href="/register?plano_id=3" class="btn-plan">Escolher Premium</a>
+            </div>
+        </div>
+
+        <div class="pricing-benefits">
+            <div class="benefit-card">
+                <strong>IA para acelerar</strong>
+                <span>Gere modelos de dados com menos esforço manual.</span>
+            </div>
+
+            <div class="benefit-card">
+                <strong>Ajustes inteligentes</strong>
+                <span>Refine estruturas, tabelas e relacionamentos com apoio automatizado.</span>
+            </div>
+
+            <div class="benefit-card">
+                <strong>Mais produtividade</strong>
+                <span>Reduza tempo de análise e padronize entregas técnicas.</span>
+            </div>
+        </div>
+
+        <div class="pricing-trust">
+            <div class="trust-item">
+                <strong>Sem compromisso</strong>
+                <span>Cancele quando quiser, sem burocracia.</span>
+            </div>
+
+            <div class="trust-item">
+                <strong>Ativação imediata</strong>
+                <span>Comece a usar o sistema em poucos minutos.</span>
+            </div>
+
+            <div class="trust-item">
+                <strong>Ambiente seguro</strong>
+                <span>Seus dados protegidos com boas práticas de segurança.</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
