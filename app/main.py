@@ -536,56 +536,57 @@ def dev_ativar_usuario(email: str):
     finally:
         db.close()
 
-        @app.get("/setup/admin")
-        def criar_admin_temporario(
-            token: str,
-            email: str,
-            senha: str,
-        ):
-            token_esperado = os.getenv("ADMIN_SETUP_TOKEN")
 
-            if not token_esperado or token != token_esperado:
-                 return {"erro": "Token inválido"}
+@app.get("/setup/admin")
+def criar_admin_temporario(
+    token: str,
+    email: str,
+    senha: str,
+):
+    token_esperado = os.getenv("ADMIN_SETUP_TOKEN")
 
-            db = SessionLocal()
+    if not token_esperado or token != token_esperado:
+        return {"erro": "Token inválido"}
 
-            try:
-                usuario_existente = db.query(User).filter(User.email == email).first()
+    db = SessionLocal()
 
-                if usuario_existente:
-                   usuario_existente.plano_id = 3
-                   usuario_existente.plano_ativo = True
-                   usuario_existente.pagamento_confirmado = True
-                   usuario_existente.plano_inicio = datetime.utcnow()
-                   usuario_existente.plano_fim = datetime.utcnow() + timedelta(days=365)
+    try:
+        usuario_existente = db.query(User).filter(User.email == email).first()
 
-                   db.commit()
+        if usuario_existente:
+            usuario_existente.plano_id = 3
+            usuario_existente.plano_ativo = True
+            usuario_existente.pagamento_confirmado = True
+            usuario_existente.plano_inicio = datetime.utcnow()
+            usuario_existente.plano_fim = datetime.utcnow() + timedelta(days=365)
 
-                   return {
-                    "mensagem": "Usuário existente ativado como admin por 365 dias",
-                    "email": usuario_existente.email,
-                    }
+            db.commit()
 
-                novo_usuario = User(
-                    email=email,
-                    senha=gerar_hash_senha(senha),
-                    plano_id=3,
-                    plano_ativo=True,
-                    pagamento_confirmado=True,
-                    plano_inicio=datetime.utcnow(),
-                    plano_fim=datetime.utcnow() + timedelta(days=365),
-                )
+            return {
+                "mensagem": "Usuário existente ativado como admin por 365 dias",
+                "email": usuario_existente.email,
+            }
 
-                db.add(novo_usuario)
-                db.commit()
+        novo_usuario = User(
+            email=email,
+            senha=gerar_hash_senha(senha),
+            plano_id=3,
+            plano_ativo=True,
+            pagamento_confirmado=True,
+            plano_inicio=datetime.utcnow(),
+            plano_fim=datetime.utcnow() + timedelta(days=365),
+        )
 
-                return {
-                    "mensagem": "Usuário admin criado com sucesso",
-                    "email": email,
-                }
+        db.add(novo_usuario)
+        db.commit()
 
-            finally:
-                db.close()
+        return {
+            "mensagem": "Usuário admin criado com sucesso",
+            "email": email,
+        }
+
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":
