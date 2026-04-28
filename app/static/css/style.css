@@ -1548,3 +1548,148 @@ textarea#descricao.descricao-textarea:focus {
     outline: none !important;
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
 }
+
+/* Lista de entidades e relacionamentos */
+.output-panel ul {
+    margin-top: 10px;
+    padding-left: 18px;
+}
+
+.output-panel li {
+    color: #cbd5f5; /* antes estava muito apagado */
+    margin-bottom: 6px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.output-panel p {
+    color: #dbeafe;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+/* Destaque do nome da entidade */
+.output-panel li strong {
+    color: #60a5fa;
+    font-weight: 700;
+}
+
+/* Tabela dark profissional */
+.output-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+/* Cabeçalho */
+.output-panel th {
+    background: rgba(30, 41, 59, 0.9);
+    color: #e2e8f0;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+/* Linhas */
+.output-panel td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(96, 165, 250, 0.15);
+    color: #cbd5f5;
+}
+
+/* Zebra striping (melhor leitura) */
+.output-panel tr:nth-child(even) {
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.output-panel tr:nth-child(odd) {
+    background: rgba(2, 6, 23, 0.6);
+}
+
+/* Hover (UX profissional) */
+.output-panel tr:hover {
+    background: rgba(37, 99, 235, 0.15);
+}
+
+.output-panel h2,
+.output-panel h3 {
+    color: #93c5fd;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Correção definitiva do contraste das respostas */
+.output-panel,
+.output-panel *,
+.output-formatado,
+.output-formatado *,
+.conteudo-formatado,
+.conteudo-formatado * {
+    color: #e5f0ff !important;
+    opacity: 1 !important;
+}
+
+/* Textos secundários */
+.output-panel p,
+.output-panel li,
+.output-panel span,
+.output-panel div,
+.output-formatado p,
+.output-formatado li,
+.output-formatado span,
+.output-formatado div {
+    color: #dbeafe !important;
+}
+
+/* Títulos */
+.output-panel h1,
+.output-panel h2,
+.output-panel h3,
+.output-panel h4,
+.output-formatado h1,
+.output-formatado h2,
+.output-formatado h3,
+.output-formatado h4 {
+    color: #ffffff !important;
+}
+
+/* Código e DDL */
+.output-panel pre,
+.output-panel code,
+.output-formatado pre,
+.output-formatado code,
+.conteudo-formatado pre,
+.conteudo-formatado code {
+    display: block;
+    color: #e0f2fe !important;
+    background: #020617 !important;
+    border: 1px solid rgba(96, 165, 250, 0.28);
+    border-radius: 12px;
+    padding: 16px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
+
+/* Tabelas */
+.output-panel table,
+.output-formatado table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #020617 !important;
+}
+
+.output-panel th,
+.output-formatado th {
+    background: #1e293b !important;
+    color: #ffffff !important;
+    padding: 12px;
+}
+
+.output-panel td,
+.output-formatado td {
+    background: #0f172a !important;
+    color: #e5f0ff !important;
+    padding: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+}
