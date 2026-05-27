@@ -1,100 +1,93 @@
 {% extends "base.html" %}
 
 {% block title %}Painel - Modelador de Dados{% endblock %}
-
 {% block body_class %}page-space{% endblock %}
 
 {% block content %}
 <section class="dashboard-space">
     <div class="dashboard-shell">
 
-        <div class="dashboard-topbar">
-            <div class="plano-info">
-                {% if saldo %}
-                    <span class="dashboard-plano-badge">{{ saldo.plano }}</span>
-                    <span class="plano-uso">
-                        {{ saldo.geracoes_completas_restantes }} gerações •
-                        {{ saldo.ajustes_restantes }} ajustes restantes
-                    </span>
-                {% endif %}
-            </div>
-            <div>
-                <span class="eyebrow">Modelador de Dados com IA</span>
-                <h1>Geração de Modelo de Dados</h1>
-                <p>Preencha os campos abaixo para solicitar a geração do modelo.</p>
-            </div>
+    <div class="dashboard-topbar">
+        <div class="plano-info">
+            {% if saldo %}
+                <span class="dashboard-plano-badge">{{ saldo.plano }}</span>
+                <span class="plano-uso">
+                    {{ saldo.geracoes_completas_restantes }} gerações •
+                    {{ saldo.ajustes_restantes }} ajustes restantes
+                </span>
+            {% endif %}
+    </div>
 
-            <a href="/logout" class="btn-dashboard-secondary">Sair</a>
-        </div>
+    <div class="dashboard-title-area">
+        <span class="eyebrow">Modelador de Dados com IA</span>
+        <h1>Geração de Modelo de Dados</h1>
+        <p>Preencha os campos abaixo para solicitar a geração do modelo.</p>
+    </div>
 
-        {% if saldo and mostrar_modal %}
-        <div id="modal-plano" class="modal-overlay">
-            <div class="modal-box">
-                <h2>Informações do plano</h2>
+    <div class="dashboard-user-actions">
+        <button type="button" class="btn-topbar" id="abrir-alterar-senha">
+            Alterar senha
+        </button>
 
-                <div class="modal-content">
-                    <p><strong>Plano atual:</strong> {{ saldo.plano }}</p>
-                    <p><strong>Gerações completas restantes:</strong> {{ saldo.geracoes_completas_restantes }} de {{ saldo.limite_geracoes_completas }}</p>
-                    <p><strong>Ajustes restantes:</strong> {{ saldo.ajustes_restantes }} de {{ saldo.limite_ajustes }}</p>
-                </div>
-
-                <div class="button-group">
-                    <button type="button" class="btn-dashboard" id="btn-fechar-modal-plano">OK</button>
-                </div>
-            </div>
-        </div>
-        {% endif %}
+        <a href="/logout" class="btn-topbar btn-logout">
+            Sair
+        </a>
+    </div>
+</div>
 
         <div class="dashboard-card">
             <h2>Nova solicitação</h2>
 
-            <form id="form-gerar-modelo" method="post" action="/gerar-modelo" enctype="multipart/form-data">
+            {% if modo_ajuste %}
+            <div class="alert-ajuste">
+                ⚙️ Você está ajustando um modelo existente
+            </div>
+            {% endif %}
+
+            <form method="post" action="/gerar-modelo" enctype="multipart/form-data">
+                <input type="hidden" name="historico_origem_id" value="{{ historico_id or '' }}">
+
+                <div class="form-group">
+                    <label>Tipo de solicitação</label>
+                    <input
+                        type="text"
+                        value="{% if modo_ajuste %}Ajuste{% else %}Geração completa{% endif %}"
+                        disabled
+                    >
+
+                    <input
+                        type="hidden"
+                        name="acao"
+                        value="{% if modo_ajuste %}ajuste{% else %}geracao_completa{% endif %}"
+                    >
+                
+                </div>
 
                 <div class="dashboard-grid-2">
                     <div class="form-group">
                         <label for="banco">Tipo de banco de dados *</label>
                         <select id="banco" name="banco" required>
                             <option value="">Selecione</option>
-                            <option value="oracle">Oracle</option>
-                            <option value="mysql">MySQL</option>
                             <option value="postgresql">PostgreSQL</option>
+                            <option value="mysql">MySQL</option>
                             <option value="sqlserver">SQL Server</option>
+                            <option value="oracle">Oracle</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="acao">Tipo de solicitação *</label>
-                        <select id="acao" name="acao" required>
+                        <label for="etapa">Etapa *</label>
+                        <select id="etapa" name="etapa" required>
                             <option value="">Selecione</option>
-                            <option value="geracao_completa">Geração completa</option>
-                            <option value="ajuste">Ajuste</option>
+                            <option value="conceitual">Conceitual</option>
+                            <option value="logico">Lógico</option>
+                            <option value="fisico">Físico</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="descricao">Descrição da solicitação *</label>
-                    <textarea
-                        id="descricao"
-                        name="descricao"
-                        class="descricao-textarea"
-                        placeholder="Exemplo: Criar modelo de dados para sistema de vendas com clientes, pedidos e produtos"
-                        required
-                        rows="5"
-                    ></textarea>
-
-                    <small class="help-text">
-                        Seja específico. Exemplos:<br>
-                        • Criar modelo de estoque com produtos e fornecedores<br>
-                        • Adicionar campo CPF na tabela cliente<br>
-                        • Gerar modelo lógico de sistema financeiro
-                    </small>
-                </div>
-
-                <div class="dashboard-grid-3">
                     <div class="form-group">
                         <label for="padrao_nomenclatura">Padrão de Nomenclatura</label>
-                        <select id="padrao_nomenclatura" name="padrao_nomenclatura">
+                        <select id="padrao_nomenclatura" name="padrao_nomenclatura" required>
                             <option value="nao">Não</option>
                             <option value="sim">Sim</option>
                         </select>
@@ -102,62 +95,55 @@
 
                     <div class="form-group">
                         <label for="padrao_abreviacao">Padrão de Abreviação</label>
-                        <select id="padrao_abreviacao" name="padrao_abreviacao">
+                        <select id="padrao_abreviacao" name="padrao_abreviacao" required>
                             <option value="nao">Não</option>
                             <option value="sim">Sim</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="etapa">Etapa a ser gerada *</label>
-                        <select id="etapa" name="etapa" required>
-                            <option value="">Selecione</option>
-                            <option value="levantamento">Levantamento</option>
-                            <option value="modelo_logico">Modelo Lógico</option>
-                            <option value="ddl_incremental">DDL Incremental</option>
-                            <option value="dicionario_dados">Dicionário de Dados</option>
-                            <option value="representacao_grafica">Representação Gráfica</option>
-                        </select>
+                    <div class="form-group hidden" id="grupo_arquivo_nomenclatura">
+                        <label for="arquivo_nomenclatura">Anexar padrão de nomenclatura</label>
+                        <input type="file" id="arquivo_nomenclatura" name="arquivo_nomenclatura">
+                        <small class="help-text">Se não anexar, será utilizado o padrão definido na API.</small>
+                    </div>
+
+                    <div class="form-group hidden" id="grupo_arquivo_abreviacao">
+                        <label for="arquivo_abreviacao">Anexar padrão de abreviação</label>
+                        <input type="file" id="arquivo_abreviacao" name="arquivo_abreviacao">
+                        <small class="help-text">Se não anexar, será utilizado o padrão definido na API.</small>
                     </div>
                 </div>
 
-                <div class="form-group hidden" id="grupo_arquivo_nomenclatura">
-                    <label for="arquivo_nomenclatura">Anexar padrão de nomenclatura</label>
-                    <input type="file" id="arquivo_nomenclatura" name="arquivo_nomenclatura">
-                    <small class="help-text">Se não anexar, será utilizado o padrão definido na API.</small>
+                {% if modo_ajuste and modelo_base %}
+                <div class="dashboard-card modelo-original-card">
+                    <h2>Modelo original selecionado</h2>
+
+                    <div class="modelo-info">
+                        <p><strong>Etapa:</strong> {{ modelo_base.etapa }}</p>
+                        <p><strong>Data:</strong> {{ modelo_base.criado_em }}</p>
+                    </div>
+
+                    <div class="output-panel modelo-original">
+                        {{ modelo_base.resposta | safe }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea name="descricao" required></textarea>
                 </div>
 
-                <div class="form-group hidden" id="grupo_arquivo_abreviacao">
-                    <label for="arquivo_abreviacao">Anexar padrão de abreviação</label>
-                    <input type="file" id="arquivo_abreviacao" name="arquivo_abreviacao">
-                    <small class="help-text">Se não anexar, será utilizado o padrão definido na API.</small>
-                </div>
-
-                <div class="dashboard-actions">
-                    <button
-                        type="submit"
-                        class="btn-dashboard"
-                        id="btn-gerar-modelo"
-                        {% if saldo and saldo.geracoes_completas_restantes == 0 and saldo.ajustes_restantes == 0 %}
-                            disabled
-                        {% endif %}
-                    >
-                        {% if saldo and saldo.geracoes_completas_restantes == 0 and saldo.ajustes_restantes == 0 %}
-                            Limite atingido
-                        {% else %}
-                            Gerar Modelo
-                        {% endif %}
+                <div class="form-actions">
+                    <button type="submit" class="btn-dashboard">
+                        Gerar Modelo
                     </button>
                 </div>
-            </form>
-
-            <form method="post" action="/parar-execucao" class="stop-form">
-                <button type="submit" class="btn-dashboard-secondary">Parar Execução</button>
             </form>
         </div>
 
         <div class="dashboard-card">
-            <h2>Output da Solicitação</h2>
+            <h2>Output</h2>
 
             <div class="output-panel">
                 {% if output %}
@@ -165,112 +151,145 @@
                         {{ output | safe }}
                     </div>
                 {% else %}
-                    <p>A saída da geração do modelo será exibida aqui.</p>
+                    <p>A saída será exibida aqui.</p>
                 {% endif %}
             </div>
         </div>
+      
 
         <div class="dashboard-card">
-            <div class="history-header">
-                <h2>Histórico de Execuções</h2>
-
-                <button
-                    type="button"
-                    class="btn-dashboard-secondary"
-                    id="btn-toggle-historico"
-                >
-                    Ver histórico
-                </button>
-            </div>
+            <h2>Histórico de Execuções</h2>
 
             {% if historico %}
-            <div
-                id="historico-container"
-                style="display: {% if mostrar_historico == 1 %}block{% else %}none{% endif %};"
-            >
-                <div class="form-group history-filter">
-                    <label for="filtro-historico">Filtrar histórico</label>
-                    <select id="filtro-historico">
-                        <option value="todos" {% if filtro_historico == "todos" %}selected{% endif %}>Todos</option>
-                        <option value="geracao_completa" {% if filtro_historico == "geracao_completa" %}selected{% endif %}>
-                            Somente gerações completas
-                        </option>
-                        <option value="ajuste" {% if filtro_historico == "ajuste" %}selected{% endif %}>
-                            Somente ajustes
-                        </option>
-                    </select>
-                </div>
+            <div class="historico-lista-cards">
+                {% for item in historico %}
+                <div class="historico-card-horizontal">
 
-                <div class="historico-lista">
-                    {% for item in historico %}
-                    <div class="historico-item" data-acao="{{ item.acao }}">
-                        <div class="historico-meta">
-                            <p><strong>Ação:</strong> {{ item.acao }}</p>
-                            <p><strong>Descrição:</strong> {{ item.descricao }}</p>
-                            <p><strong>Banco:</strong> {{ item.banco }}</p>
-                            <p><strong>Etapa:</strong> {{ item.etapa }}</p>
-                            <p><strong>Data:</strong> {{ item.criado_em }}</p>
-                            <p>
-                                <strong>Status:</strong>
-                                {% if item.status == "sucesso" %}
-                                    <span class="historico-status historico-status-sucesso">Sucesso</span>
-                                {% else %}
-                                    <span class="historico-status historico-status-erro">Erro</span>
-                                {% endif %}
-                            </p>
-                        </div>
+                    <div class="historico-col">
+                        <p class="label">Ação</p>
+                        <p class="valor">
+                            {% if item.acao == "ajuste" %}
+                                Ajuste
+                            {% else %}
+                                Geração Completa
+                            {% endif %}
+                        </p>
+                    </div>
 
-                        {% if item.resposta %}
-                        <button
-                            type="button"
-                            class="btn-dashboard-secondary btn-toggle-resposta"
-                        >
-                            Ver resposta
-                        </button>
+                    <div class="historico-col historico-descricao">
+                        <p class="label">Descrição</p>
+                        <p class="valor">{{ item.descricao }}</p>
+                    </div>
 
-                        <div class="historico-resposta conteudo-formatado" style="display: none;">
-                            {{ item.resposta|safe }}
-                        </div>
+                    <div class="historico-col">
+                        <p class="label">Banco</p>
+                        <p class="valor">{{ item.banco }}</p>
+                    </div>
+
+                    <div class="historico-col">
+                        <p class="label">Etapa</p>
+                        <p class="valor">{{ item.etapa }}</p>
+                    </div>
+
+                    <div class="historico-col">
+                        <p class="label">Data</p>
+                        <p class="valor">{{ item.criado_em }}</p>
+                    </div>
+
+                    <div class="historico-col">
+                        <p class="label">Status</p>
+                        {% if item.status == "sucesso" %}
+                            <span class="historico-status historico-status-sucesso">Sucesso</span>
+                        {% else %}
+                            <span class="historico-status historico-status-erro">Erro</span>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                </div>
 
-                <div class="pagination-row">
-                    {% if page > 1 %}
-                        <a
-                            href="/dashboard?page={{ page - 1 }}&mostrar_historico=1&filtro_historico={{ filtro_historico }}"
-                            id="btn-pagina-anterior"
-                            data-page="{{ page - 1 }}"
-                            class="btn-dashboard-secondary"
-                        >
-                            Anterior
-                        </a>
-                    {% else %}
-                        <span></span>
+                    <div class="historico-col historico-col-acoes">
+                        <form method="post" action="/ajustar-modelo">
+                            <input type="hidden" name="historico_id" value="{{ item.id }}">
+                            <button type="submit" class="btn-ajustar">
+                                Ajustar
+                            </button>
+                        </form>
+
+                        {% if item.resposta %}
+                        <button type="button" class="btn-ver-resposta btn-toggle-resposta">
+                            Ver
+                        </button>
+                        {% endif %}
+                    </div>
+
+                    {% if item.resposta %}
+                    <div class="historico-resposta conteudo-formatado" style="display: none;">
+                        {{ item.resposta | safe }}
+                    </div>
                     {% endif %}
 
-                    <span>Página {{ page }}</span>
-
-                    {% if tem_proxima %}
-                        <a
-                            href="/dashboard?page={{ page + 1 }}&mostrar_historico=1&filtro_historico={{ filtro_historico }}"
-                            id="btn-pagina-proxima"
-                            data-page="{{ page + 1 }}"
-                            class="btn-dashboard"
-                        >
-                            Próxima
-                        </a>
-                    {% else %}
-                        <span></span>
-                    {% endif %}
                 </div>
+                {% endfor %}
             </div>
             {% else %}
-                <p class="empty-history">Nenhuma execução encontrada ainda.</p>
+                <p>Nenhuma execução encontrada.</p>
             {% endif %}
         </div>
 
     </div>
 </section>
+
+    <div id="modal-alterar-senha" class="modal-recuperacao-overlay">
+    <div class="modal-recuperacao-box">
+        <button type="button" class="modal-fechar" id="fechar-alterar-senha">
+            ✕
+        </button>
+
+        <h2>Alterar senha</h2>
+
+        <form method="post" action="/alterar-senha">
+            <div class="form-group">
+                <label>Senha atual</label>
+                <input type="password" name="senha_atual" required>
+            </div>
+
+            <div class="form-group">
+                <label>Nova senha</label>
+                <input type="password" name="nova_senha" required>
+            </div>
+
+            <div class="form-group">
+                <label>Confirmar nova senha</label>
+                <input type="password" name="confirmar_senha" required>
+            </div>
+
+            <button type="submit" class="btn-dashboard">
+                Salvar nova senha
+            </button>
+        </form>
+    </div>
+</div>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const abrir = document.getElementById("abrir-alterar-senha");
+    const fechar = document.getElementById("fechar-alterar-senha");
+    const modal = document.getElementById("modal-alterar-senha");
+
+    if (!abrir || !modal) return;
+
+    abrir.addEventListener("click", function () {
+        modal.style.display = "flex";
+    });
+
+    if (fechar) {
+        fechar.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+    }
+
+    modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
+</script>
 {% endblock %}

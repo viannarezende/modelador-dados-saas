@@ -10,9 +10,10 @@ from sqlalchemy import (
 )
 from app.database.connection import Base
 from datetime import datetime
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
 
-Base = declarative_base()
+
+
 
 class User(Base):
     __tablename__ = "users"
@@ -71,6 +72,8 @@ class HistoricoExecucao(Base):
         id = Column(Integer, primary_key=True, index=True)
         usuario_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
+        historico_origem_id = Column(Integer, ForeignKey("historico_execucao.id"), nullable=True)
+
         acao = Column(String(30), nullable=False)
         banco = Column(String(30), nullable=False)
         etapa = Column(String(50), nullable=False)
@@ -89,4 +92,5 @@ class HistoricoExecucao(Base):
         tokens_entrada = Column(BigInteger, nullable=False, default=0)
         tokens_saida = Column(BigInteger, nullable=False, default=0)
         tokens_total = Column(BigInteger, nullable=False, default=0) 
-        criado_em = Column(String, nullable=False, default=lambda: datetime.now().strftime("%d/%m/%Y %H:%M"))   
+        criado_em = Column(String, nullable=False, default=lambda: datetime.now().strftime("%d/%m/%Y %H:%M")) 
+          

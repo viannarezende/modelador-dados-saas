@@ -6,8 +6,13 @@ from fastapi import UploadFile
 
 EXTENSOES_PERMITIDAS = {".txt", ".csv", ".xlsx", ".xls", ".pdf", ".docx"}
 
-UPLOAD_DIR = Path("uploads")
-UPLOAD_DIR.mkdir(exist_ok=True)
+# 📌 Base do projeto (pasta app)
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# 📌 uploads dentro do app
+UPLOAD_DIR = BASE_DIR / "uploads"
+
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def salvar_arquivo(upload_file: UploadFile | None) -> str | None:

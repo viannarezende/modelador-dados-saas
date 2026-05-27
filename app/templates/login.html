@@ -53,6 +53,12 @@
                 <button type="submit" class="btn-plan">
                     Entrar
                 </button>
+
+                <div style="margin-top: 16px; text-align: center;">
+                    <a href="#" id="abrir-recuperacao">
+                         Esqueci minha senha
+                    </a>
+                </div>
             </form>
 
             <p class="login-footer">
@@ -63,4 +69,71 @@
     </div>
 
 </section>
+    <div id="modal-recuperacao" class="modal-recuperacao-overlay">
+
+    <div class="modal-recuperacao-box">
+
+        <button
+            type="button"
+            class="modal-fechar"
+            id="fechar-recuperacao"
+        >
+            ✕
+        </button>
+
+        <h2>Recuperar senha</h2>
+
+        <p class="modal-subtitulo">
+            Informe seu e-mail para receber uma nova senha temporária.
+        </p>
+
+        <form method="post" action="/esqueci-senha">
+
+            <div class="form-group">
+                <label>E-mail</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="seuemail@empresa.com"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-plan">
+                Enviar nova senha
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const abrir = document.getElementById("abrir-recuperacao");
+    const fechar = document.getElementById("fechar-recuperacao");
+    const modal = document.getElementById("modal-recuperacao");
+
+    if (!abrir || !modal) return;
+
+    abrir.addEventListener("click", function (e) {
+        e.preventDefault();
+        modal.style.display = "flex";
+    });
+
+    if (fechar) {
+        fechar.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+    }
+
+    modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
+</script>
 {% endblock %}

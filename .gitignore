@@ -1,9 +1,10 @@
 # Ambiente virtual
 .venv/
-venv/
+ venv/
 
 # Variáveis de ambiente
 .env
+.venv/
 
 # Cache Python
 __pycache__/
@@ -11,6 +12,7 @@ __pycache__/
 
 # Banco local
 modelador.db
+*.db
 
 # Uploads
 uploads/

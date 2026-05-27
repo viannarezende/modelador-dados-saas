@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Pagamento pendente - Modelador de Dados{% endblock %}
+
+{% block body_class %}page-space{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card">
+        <h1>Pagamento pendente</h1>
+
+        <p class="subtitle">
+            Sua conta foi criada com sucesso. Para liberar o acesso,
+            finalize o pagamento do plano escolhido.
+        </p>
+
+        <div style="display: grid; gap: 14px; margin-top: 24px;">
+            <a href="{{ checkout_basico }}" class="btn-plan">
+                Pagar Plano Básico
+            </a>
+
+            <a href="{{ checkout_profissional }}" class="btn-plan">
+                Pagar Plano Profissional
+            </a>
+        </div>
+
+        <p class="login-footer">
+            Já pagou?
+            <a href="/login">Entrar</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

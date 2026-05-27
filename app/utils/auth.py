@@ -20,4 +20,7 @@ def gerar_hash_senha(senha: str) -> str:
 
 
 def verificar_senha(senha_texto: str, senha_hash: str) -> bool:
-    return pwd_context.verify(senha_texto, senha_hash)
+    try:
+        return pwd_context.verify(senha_texto, senha_hash)
+    except Exception:
+        return False

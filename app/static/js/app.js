@@ -85,29 +85,22 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ==============================
-    // VER / OCULTAR RESPOSTA
-    // ==============================
-    const botoesResposta = document.querySelectorAll(".btn-toggle-resposta");
+// ==============================
+// VER / OCULTAR RESPOSTA
+// ==============================
+document.querySelectorAll(".btn-toggle-resposta").forEach((botao) => {
+    botao.addEventListener("click", function () {
+        const card = botao.closest(".historico-card-horizontal");
+        const resposta = card.querySelector(".historico-resposta");
 
-    botoesResposta.forEach((botao) => {
-        botao.addEventListener("click", function () {
-            const resposta = botao.nextElementSibling;
-            if (!resposta) return;
+        if (!resposta) return;
 
-            const estaOculta =
-                resposta.style.display === "none" || resposta.style.display === "";
+        const estaOculta = resposta.style.display === "none" || resposta.style.display === "";
 
-            if (estaOculta) {
-                resposta.style.display = "block";
-                botao.innerText = "Ocultar resposta";
-            } else {
-                resposta.style.display = "none";
-                botao.innerText = "Ver resposta";
-            }
-        });
+        resposta.style.display = estaOculta ? "block" : "none";
+        botao.innerText = estaOculta ? "Ocultar" : "Ver";
     });
-
+});
         // ==============================
     // FILTRO DO HISTÓRICO
     // ==============================
