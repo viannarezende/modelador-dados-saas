@@ -2249,3 +2249,52 @@ textarea#descricao.descricao-textarea:focus {
 .register-box .form-group {
     width: 100%;
 }
+
+/* Correção produção - tela cadastro/login */
+.auth-page {
+    min-height: 100vh !important;
+    width: 100% !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    padding: 40px 20px !important;
+    box-sizing: border-box !important;
+}
+
+.auth-card {
+    width: 100% !important;
+    max-width: 440px !important;
+
+    margin: 0 auto !important;
+
+    position: relative !important;
+    z-index: 10 !important;
+
+    padding: 36px !important;
+    box-sizing: border-box !important;
+}
+
+.auth-card form {
+    width: 100% !important;
+}
+
+.auth-card .form-group {
+    width: 100% !important;
+}
+
+.auth-card input {
+    width: 100% !important;
+    display: block !important;
+
+    position: relative !important;
+    z-index: 20 !important;
+
+    pointer-events: auto !important;
+}
+
+.auth-card .btn-plan {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
