@@ -5,6 +5,7 @@ from sqlalchemy import (
     Integer,
     BigInteger,
     String,
+    Text,
     UniqueConstraint,
     DateTime,
 )
@@ -13,14 +14,12 @@ from datetime import datetime
 from sqlalchemy.orm import relationship
 
 
-
-
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, nullable=False, index=True)
-    senha = Column(String, nullable=False)
+    email = Column(String(255), unique=True, nullable=False, index=True)
+    senha = Column(String(255), nullable=False)
 
     plano_id = Column(Integer, ForeignKey("planos.id"), nullable=True)
 
@@ -66,31 +65,40 @@ class UsoMensalUsuario(Base):
 
     usuario = relationship("User", back_populates="usos_mensais")
 
+
 class HistoricoExecucao(Base):
-        __tablename__ = "historico_execucao"
+    __tablename__ = "historico_execucao"
 
-        id = Column(Integer, primary_key=True, index=True)
-        usuario_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    usuario_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
-        historico_origem_id = Column(Integer, ForeignKey("historico_execucao.id"), nullable=True)
+    historico_origem_id = Column(
+        Integer,
+        ForeignKey("historico_execucao.id"),
+        nullable=True,
+    )
 
-        acao = Column(String(30), nullable=False)
-        banco = Column(String(30), nullable=False)
-        etapa = Column(String(50), nullable=False)
+    acao = Column(String(30), nullable=False)
+    banco = Column(String(30), nullable=False)
+    etapa = Column(String(50), nullable=False)
 
-        descricao = Column(String, nullable=False)
+    descricao = Column(Text, nullable=False)
 
-        padrao_nomenclatura = Column(String(10), nullable=False)
-        padrao_abreviacao = Column(String(10), nullable=False)
+    padrao_nomenclatura = Column(String(10), nullable=False)
+    padrao_abreviacao = Column(String(10), nullable=False)
 
-        arquivo_nomenclatura = Column(String, nullable=True)
-        arquivo_abreviacao = Column(String, nullable=True)
+    arquivo_nomenclatura = Column(String(500), nullable=True)
+    arquivo_abreviacao = Column(String(500), nullable=True)
 
-        status = Column(String(20), nullable=False)  # sucesso / erro
-        resposta = Column(String, nullable=True)
+    status = Column(String(20), nullable=False)
+    resposta = Column(Text, nullable=True)
 
-        tokens_entrada = Column(BigInteger, nullable=False, default=0)
-        tokens_saida = Column(BigInteger, nullable=False, default=0)
-        tokens_total = Column(BigInteger, nullable=False, default=0) 
-        criado_em = Column(String, nullable=False, default=lambda: datetime.now().strftime("%d/%m/%Y %H:%M")) 
-          
+    tokens_entrada = Column(BigInteger, nullable=False, default=0)
+    tokens_saida = Column(BigInteger, nullable=False, default=0)
+    tokens_total = Column(BigInteger, nullable=False, default=0)
+
+    criado_em = Column(
+        String(30),
+        nullable=False,
+        default=lambda: datetime.now().strftime("%d/%m/%Y %H:%M"),
+    )
