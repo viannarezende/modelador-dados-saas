@@ -2,8 +2,10 @@ import os
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Request, Header, HTTPException
+
 from app.database.connection import SessionLocal
-from app.database.models import User, Plano
+from app.database.models import User
+
 
 router = APIRouter()
 
@@ -24,10 +26,11 @@ async def webhook_hotmart(
     dados = payload.get("data", {})
 
     comprador = dados.get("buyer", {})
-    produto = dados.get("product", {})
+    compra = dados.get("purchase", {})
+    oferta = compra.get("offer", {})
 
     email = comprador.get("email")
-    produto_id = str(produto.get("id"))
+    oferta_codigo = str(oferta.get("code"))
 
     if not email:
         return {"ok": True, "mensagem": "Evento sem e-mail do comprador"}
@@ -37,14 +40,17 @@ async def webhook_hotmart(
 
     plano_id = None
 
-    if produto_id == os.getenv("HOTMART_PRODUTO_BASICO_ID"):
+    if oferta_codigo == os.getenv("HOTMART_OFERTA_BASICO_ID"):
         plano_id = 1
 
-    elif produto_id == os.getenv("HOTMART_PRODUTO_PROFISSIONAL_ID"):
+    elif oferta_codigo == os.getenv("HOTMART_OFERTA_PROFISSIONAL_ID"):
         plano_id = 2
 
     if not plano_id:
-        return {"ok": True, "mensagem": "Produto não mapeado"}
+        return {
+            "ok": True,
+            "mensagem": f"Oferta não mapeada: {oferta_codigo}",
+        }
 
     db = SessionLocal()
 
@@ -60,11 +66,9 @@ async def webhook_hotmart(
         usuario.plano_inicio = datetime.utcnow()
 
         if plano_id == 1:
-            # Básico: créditos por consumo; por enquanto deixamos sem expiração.
             usuario.plano_fim = None
 
         elif plano_id == 2:
-            # Profissional: assinatura mensal.
             usuario.plano_fim = datetime.utcnow() + timedelta(days=30)
 
         db.commit()
@@ -74,6 +78,7 @@ async def webhook_hotmart(
             "mensagem": "Plano ativado com sucesso",
             "email": email,
             "plano_id": plano_id,
+            "oferta_codigo": oferta_codigo,
         }
 
     finally:
