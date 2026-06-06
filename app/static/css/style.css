@@ -2298,3 +2298,79 @@ textarea#descricao.descricao-textarea:focus {
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
+/* ===============================
+   RESPONSIVIDADE MOBILE DASHBOARD
+================================ */
+
+@media (max-width: 768px) {
+    .dashboard-space {
+        padding: 12px;
+        overflow-x: hidden;
+    }
+
+    .dashboard-shell {
+        width: 100%;
+        padding: 12px;
+        overflow-x: hidden;
+    }
+
+    .dashboard-topbar {
+        padding: 20px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 22px;
+    }
+
+    .plano-info {
+        padding-top: 0;
+        margin-top: 0;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .dashboard-title-area {
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .dashboard-title-area h1 {
+        white-space: normal;
+        font-size: 34px;
+        line-height: 1.15;
+        word-break: normal;
+    }
+
+    .dashboard-title-area p {
+        font-size: 18px;
+        line-height: 1.4;
+    }
+
+    .dashboard-user-actions {
+        width: 100%;
+        padding-top: 0;
+        display: grid;
+        grid-template-columns: 1fr 110px;
+        gap: 12px;
+    }
+
+    .btn-topbar {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .dashboard-card {
+        padding: 20px;
+    }
+
+    .dashboard-grid-2,
+    .dashboard-grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-card textarea,
+    .dashboard-card select,
+    .dashboard-card input {
+        font-size: 16px;
+    }
+}
