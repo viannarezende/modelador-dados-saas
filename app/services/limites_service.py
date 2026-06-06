@@ -65,13 +65,42 @@ def validar_limite(uso: UsoMensalUsuario, plano: Plano, acao: str) -> tuple[bool
     if acao not in ACOES_VALIDAS:
         return False, "Ação inválida."
 
+    # PLANO BÁSICO = 1
+    # PLANO PROFISSIONAL = 2
+
     if acao == "geracao_completa":
         if uso.geracoes_completas_usadas >= plano.limite_geracoes_completas:
-            return False, "Limite de gerações completas atingido no mês."
+
+            if plano.id == 1:
+                return False, (
+                    "Você utilizou todos os créditos de geração completa do seu plano. "
+                    "Faça logout e escolha uma nova assinatura para continuar utilizando a plataforma."
+                )
+
+            elif plano.id == 2:
+                return False, (
+                    "Limite de gerações completas atingido no período atual da assinatura. "
+                    "Os créditos serão renovados automaticamente no próximo ciclo."
+                )
+
+            return False, "Limite de gerações completas atingido."
 
     elif acao == "ajuste":
         if uso.ajustes_usados >= plano.limite_ajustes:
-            return False, "Limite de ajustes atingido no mês."
+
+            if plano.id == 1:
+                return False, (
+                    "Você utilizou todos os créditos de ajuste do seu plano. "
+                    "Faça logout e escolha uma nova assinatura para continuar utilizando a plataforma."
+                )
+
+            elif plano.id == 2:
+                return False, (
+                    "Limite de ajustes atingido no período atual da assinatura. "
+                    "Os créditos serão renovados automaticamente no próximo ciclo."
+                )
+
+            return False, "Limite de ajustes atingido."
 
     return True, "Permitido"
 
