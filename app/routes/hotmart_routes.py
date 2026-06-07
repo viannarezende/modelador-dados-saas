@@ -1,10 +1,12 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,timezone
 
 from fastapi import APIRouter, Request, Header, HTTPException
 
 from app.database.connection import SessionLocal
-from app.database.models import User
+from app.database.models import User, LogRenovacaoCreditos
+
+from app.services.limites_service import obter_ou_criar_uso_mensal
 
 
 router = APIRouter()
@@ -19,6 +21,8 @@ async def webhook_hotmart(
 
     if not hottok_configurado or x_hotmart_hottok != hottok_configurado:
         raise HTTPException(status_code=401, detail="Webhook não autorizado")
+    
+  
 
     payload = await request.json()
 
@@ -63,13 +67,34 @@ async def webhook_hotmart(
         usuario.plano_id = plano_id
         usuario.plano_ativo = True
         usuario.pagamento_confirmado = True
-        usuario.plano_inicio = datetime.utcnow()
+        usuario.plano_inicio = datetime.now(timezone.utc)
+
+        uso = obter_ou_criar_uso_mensal(db, usuario.id)
+
+        log_renovacao = LogRenovacaoCreditos(
+            usuario_id=usuario.id,
+            plano_id=plano_id,
+            geracoes_completas_usadas_antes=uso.geracoes_completas_usadas,
+            ajustes_usados_antes=uso.ajustes_usados,
+            tokens_entrada_antes=uso.tokens_entrada,
+            tokens_saida_antes=uso.tokens_saida,
+            tokens_total_antes=uso.tokens_total,
+            origem="hotmart",
+        )
+
+        db.add(log_renovacao)
+
+        uso.geracoes_completas_usadas = 0
+        uso.ajustes_usados = 0
+        uso.tokens_entrada = 0
+        uso.tokens_saida = 0
+        uso.tokens_total = 0
 
         if plano_id == 1:
             usuario.plano_fim = None
 
         elif plano_id == 2:
-            usuario.plano_fim = datetime.utcnow() + timedelta(days=30)
+            usuario.plano_fim = datetime.now(timezone.utc) + timedelta(days=30)
 
         db.commit()
 

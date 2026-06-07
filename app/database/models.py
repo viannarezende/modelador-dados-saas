@@ -102,3 +102,21 @@ class HistoricoExecucao(Base):
         nullable=False,
         default=lambda: datetime.now().strftime("%d/%m/%Y %H:%M"),
     )
+
+class LogRenovacaoCreditos(Base):
+    __tablename__ = "log_renovacao_creditos"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    usuario_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    plano_id = Column(Integer, ForeignKey("planos.id"), nullable=False)
+
+    geracoes_completas_usadas_antes = Column(Integer, nullable=False, default=0)
+    ajustes_usados_antes = Column(Integer, nullable=False, default=0)
+
+    tokens_entrada_antes = Column(BigInteger, nullable=False, default=0)
+    tokens_saida_antes = Column(BigInteger, nullable=False, default=0)
+    tokens_total_antes = Column(BigInteger, nullable=False, default=0)
+
+    origem = Column(String(50), nullable=False, default="hotmart")
+    criado_em = Column(DateTime, nullable=False, default=datetime.now)
