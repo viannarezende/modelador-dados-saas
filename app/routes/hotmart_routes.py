@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta,timezone
 
-from fastapi import APIRouter, Request, Header, HTTPException
+from fastapi import APIRouter, Request, Header, HTTPException, Body
 
 from app.database.connection import SessionLocal
 from app.database.models import User, LogRenovacaoCreditos
@@ -15,6 +15,7 @@ router = APIRouter()
 @router.post("/webhook/hotmart")
 async def webhook_hotmart(
     request: Request,
+    payload: dict = Body(...),
     x_hotmart_hottok: str | None = Header(default=None),
 ):
     hottok_configurado = os.getenv("HOTMART_HOTTOK")
@@ -24,7 +25,7 @@ async def webhook_hotmart(
     
   
 
-    payload = await request.json()
+
 
     evento = payload.get("event")
     dados = payload.get("data", {})
