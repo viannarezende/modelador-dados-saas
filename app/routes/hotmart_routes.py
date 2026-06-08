@@ -92,7 +92,7 @@ async def webhook_hotmart(
         uso.tokens_total = 0
 
         if plano_id == 1:
-            usuario.plano_fim = None
+            usuario.plano_fim = datetime.now(timezone.utc) + timedelta(days=365)
 
         elif plano_id == 2:
             usuario.plano_fim = datetime.now(timezone.utc) + timedelta(days=30)
