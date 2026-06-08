@@ -21,9 +21,15 @@ from app.utils.session import (
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-APP_ENV = os.getenv("APP_ENV", "production")
+APP_ENV = os.getenv("APP_ENV", "development")
 
-app = FastAPI(title="Modelador de Dados")
+app = FastAPI(
+    title="Modelador de Dados",
+    docs_url="/docs" if APP_ENV != "production" else None,
+    redoc_url="/redoc" if APP_ENV != "production" else None,
+    openapi_url="/openapi.json" if APP_ENV != "production" else None,
+)
+
 app.include_router(auth_routes.router)
 app.include_router(dashboard_routes.router)
 app.include_router(modelagem_routes.router)
